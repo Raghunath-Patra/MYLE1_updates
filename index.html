@@ -82,12 +82,18 @@
   <h1>MYLE1</h1>
   <p class="version">Version 0.3.0</p>
 
-  <a class="primary" href="https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-arm64-v8a-release.apk">
+  <div id="non-android-notice" class="notes" style="display:none;">
+    <h2>Open this on your Android phone</h2>
+    <p style="margin:0;">MYLE1 is an Android app. Open this page in your Android phone's browser to
+    install it — this device doesn't look like an Android phone.</p>
+  </div>
+
+  <a id="primary-btn" class="primary" href="https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-arm64-v8a-release.apk">
     Download for most phones
   </a>
-  <p class="sub">Works on nearly every Android phone from the last several years (arm64-v8a, ~53&nbsp;MB)</p>
+  <p id="primary-sub" class="sub">Works on nearly every Android phone from the last several years (arm64-v8a)</p>
 
-  <div class="notes">
+  <div id="install-notes" class="notes">
     <h2>To install</h2>
     <ol>
       <li>Tap the download button above.</li>
@@ -96,14 +102,79 @@
     </ol>
   </div>
 
-  <details>
-    <summary>Having trouble, or on an older/different device?</summary>
+  <details id="manual-picker">
+    <summary>Having trouble, or want to choose manually?</summary>
     <ul class="alt-list">
+      <li><a href="https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-arm64-v8a-release.apk">arm64-v8a — most modern phones</a></li>
       <li><a href="https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-armeabi-v7a-release.apk">armeabi-v7a — older 32-bit phones</a></li>
       <li><a href="https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-x86_64-release.apk">x86_64 — Intel/AMD-based devices, emulators</a></li>
       <li><a href="https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-x86-release.apk">x86 — older Intel-based devices</a></li>
     </ul>
   </details>
+
+  <script>
+    (function () {
+      var ABI_URLS = {
+        "arm64-v8a": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-arm64-v8a-release.apk",
+        "armeabi-v7a": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-armeabi-v7a-release.apk",
+        "x86_64": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-x86_64-release.apk",
+        "x86": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/1/app-x86-release.apk"
+      };
+      var ABI_LABELS = {
+        "arm64-v8a": "arm64-v8a",
+        "armeabi-v7a": "armeabi-v7a (older 32-bit)",
+        "x86_64": "x86_64",
+        "x86": "x86 (older 32-bit)"
+      };
+
+      var ua = navigator.userAgent || "";
+      var isAndroid = /Android/i.test(ua);
+
+      var btn = document.getElementById("primary-btn");
+      var sub = document.getElementById("primary-sub");
+
+      if (!isAndroid) {
+        btn.style.display = "none";
+        sub.style.display = "none";
+        document.getElementById("install-notes").style.display = "none";
+        document.getElementById("non-android-notice").style.display = "block";
+        return;
+      }
+
+      // No standard JS API reports CPU architecture. Chromium's User-Agent Client Hints (Chrome,
+      // Edge, Samsung Internet, ...) can report it with the user's consent-free "high entropy"
+      // values; browsers without that API (Firefox, older Chromium, most in-app webviews) fall
+      // through to the plain-UA heuristic below, which can only reliably spot x86 — anything it
+      // can't identify keeps the arm64-v8a default already covering the vast majority of phones.
+      function applyDetectedAbi(abi) {
+        if (!abi || !ABI_URLS[abi]) return;
+        btn.href = ABI_URLS[abi];
+        btn.textContent = "Download for your device";
+        sub.textContent = "Detected: " + ABI_LABELS[abi];
+      }
+
+      function fallbackAbiFromUa() {
+        if (/x86_64|amd64/i.test(ua)) return "x86_64";
+        if (/x86|i686/i.test(ua)) return "x86";
+        return null;
+      }
+
+      if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+        navigator.userAgentData.getHighEntropyValues(["architecture", "bitness"])
+          .then(function (info) {
+            var arch = (info.architecture || "").toLowerCase();
+            var is64 = info.bitness === "64";
+            var abi = null;
+            if (arch.indexOf("arm") !== -1) abi = is64 ? "arm64-v8a" : "armeabi-v7a";
+            else if (arch.indexOf("x86") !== -1) abi = is64 ? "x86_64" : "x86";
+            applyDetectedAbi(abi || fallbackAbiFromUa());
+          })
+          .catch(function () { applyDetectedAbi(fallbackAbiFromUa()); });
+      } else {
+        applyDetectedAbi(fallbackAbiFromUa());
+      }
+    })();
+  </script>
 
   <footer>
     MYLE1 updates itself after this first install — no need to come back here again.<br>
