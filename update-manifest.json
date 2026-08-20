@@ -1,11 +1,11 @@
 {
-  "versionCode": 3,
-  "versionName": "0.4.0",
-  "notes": "- Added retry mechanism for failed downloads\n- App data made persistent across updates\n- Thumbnail cleanup\n- in app browser support",
+  "versionCode": 4,
+  "versionName": "0.4.1",
+  "notes": "- Pause All now correctly switches to Continue All instead of staying stuck\n- Added Pause/Resume buttons to the download notification, not just Cancel\n- App updates now show a live download progress notification, with an Install button once ready\n- Update progress is also shown in Settings\n- Clearer, friendlier error message when a download fails (network issues, blocked sites, etc.)\n- Downloads whose file was deleted elsewhere now show dimmed instead of re-checking every time\n- Fixed: a deleted file restored by another app (e.g. a gallery's recycle bin) is now found again",
   "apks": {
-    "arm64-v8a": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/3/app-arm64-v8a-release.apk",
-    "armeabi-v7a": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/3/app-armeabi-v7a-release.apk",
-    "x86_64": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/3/app-x86_64-release.apk",
-    "x86": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/3/app-x86-release.apk"
+    "arm64-v8a": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/4/app-arm64-v8a-release.apk",
+    "armeabi-v7a": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/4/app-armeabi-v7a-release.apk",
+    "x86_64": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/4/app-x86_64-release.apk",
+    "x86": "https://raw.githubusercontent.com/Raghunath-Patra/MYLE1_updates/main/releases/4/app-x86-release.apk"
   }
 }
